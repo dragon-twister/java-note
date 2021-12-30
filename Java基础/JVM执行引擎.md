@@ -1,6 +1,6 @@
 # 执行引擎（Execution Engine）
 
-![](..\image\jit.png)  
+![](../image/jit.png)  
 
 执行引擎主要用来执行Java生成.class的字节码，解析成各种cpu所能执行的二进制指令。。
 
