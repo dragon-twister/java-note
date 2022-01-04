@@ -1,6 +1,6 @@
 [TOC]
 
-<img src="../image/Netty特性.svg" style="zoom:67%;" />
+​	<img src="../image/Netty特性.svg" style="zoom:64%;" />
 
 # Netty
 
@@ -103,7 +103,7 @@ NioEventLoopGroup，主要管理 eventLoop 的生命周期，可以理解为一�
 
 ### NioEventLoop
 
-​	<img src="../image/Netty Nioeventloop.svg" style="zoom: 50%;" />
+​	<img src="../image/Netty Nioeventloop.svg" style="zoom: 44%;" />
 
 Netty的事件循环EventLoop是一个不断循环着执行读取就绪事件、处理事件、运行任务队列这三个操作的一个线程。 
 
@@ -236,7 +236,7 @@ channelFuture.addListener(new ChannelFutureListener() {
 
 ### ChannelPipline
 
-​	<img src="../image/ChannelPipline.svg" style="zoom:67%;" />
+​	<img src="../image/ChannelPipline.svg" style="zoom:60%;" />
 
 一个 Channel 包含了一个 ChannelPipeline，而 ChannelPipeline 中又维护了一个由 ChannelHandlerContext 组成的双向链表，并且每个 ChannelHandlerContext 中又关联着一个 ChannelHandler。
 
@@ -355,7 +355,7 @@ Netty 中 Bootstrap 类是客户端程序的启动引导类，ServerBootstrap �
 
 结合上面的介绍的Netty Reactor模型，介绍服务端Netty的工作架构图：
 
-  <img src="../image/Netty架构.svg" style="zoom:50%;" />
+  <img src="../image/Netty架构.svg" style="zoom: 38%;" />
 
 服务端Netty Reactor工作架构图
 
@@ -407,6 +407,6 @@ Netty收到channelInactive到事件后，通过定时器隔断时间后重连。
 
 记录bug的发生次数，当数目达到一定数目后，重建selector。
 
-## 参考资料：
+## 参考资料
 
  [netty系列：一行简单的writeAndFlush都做了哪些事 - 掘金 (juejin.cn)](https://juejin.cn/post/7010924544378535950) 
