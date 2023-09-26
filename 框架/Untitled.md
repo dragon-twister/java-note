@@ -1,0 +1,2 @@
+ Impala和  Hive 
+
