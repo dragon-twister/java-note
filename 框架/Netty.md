@@ -35,8 +35,6 @@
 
 ## 组件
 
-
-
 ## ByteBuf
 
 字节数据容器，缓冲区的主要目的是把数据化零为整，以减少读写次数。
@@ -234,7 +232,7 @@ channelFuture.addListener(new ChannelFutureListener() {
 
 保存 Channel 相关的所有上下文信息，同时关联一个 ChannelHandler 对象。
 
-### ChannelPipline
+### ChannelPipline（流水线）
 
 ​	<img src="../image/ChannelPipline.svg" style="zoom:60%;" />
 
@@ -355,7 +353,7 @@ Netty 中 Bootstrap 类是客户端程序的启动引导类，ServerBootstrap �
 
 结合上面的介绍的Netty Reactor模型，介绍服务端Netty的工作架构图：
 
-  <img src="../image/Netty架构.svg" style="zoom: 38%;" />
+  <img src="C:\Users\liangshizhu\Desktop\Netty架构.svg" style="zoom: 38%;" />
 
 服务端Netty Reactor工作架构图
 
@@ -403,9 +401,15 @@ Netty收到channelInactive到事件后，通过定时器隔断时间后重连。
 1. GlobalTrafficShapingHandler：全局流量整形，放在服务器端，表示所有链接该服务器的channel整体的流量不超过阈值
 2. ChannelTrafficShapingHandler：表示单个channel的流量作出限制 
 
-### Netty如何解决空轮询
+### Netty如何解决Java nio 空轮询bug
 
-记录bug的发生次数，当数目达到一定数目后，重建selector。
+问题原因：
+
+当连接被异常关闭时，本应该阻塞的 Selector.select() 方法返回0，导致程序一直在空轮询，cpu飙升。
+
+解决方法：
+
+记录bug的发生次数，当数目达到一定数目后(1024)，重建selector。
 
 ## 参考资料
 

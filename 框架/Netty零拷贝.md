@@ -67,8 +67,4 @@ Netty的零拷贝主要体现在五个方面
    ByteBuf body = byteBuf.slice(5, 10);
    ```
 
-## 参考资料
 
- [原来 8 张图，就可以搞懂「零拷贝」了 - 小林coding - 博客园 (cnblogs.com)](https://www.cnblogs.com/xiaolincoding/p/13719610.html#:~:text=应用进程再调用 write () ，操作系统直接将内核缓冲区的数据拷贝到 socket 缓冲区中，这一切都发生在内核态，由,CPU 来搬运数据； 最后，把内核的 socket 缓冲区里的数据，拷贝到网卡的缓冲区里，这个过程是由 DMA 搬运的。) 
-
- [深入剖析Linux IO原理和几种零拷贝机制的实现 - 算法网 (itpcb.com)](http://itpcb.com/a/583643) 

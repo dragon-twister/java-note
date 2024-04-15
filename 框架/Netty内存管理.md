@@ -1,7 +1,5 @@
  ![img](https://upload-images.jianshu.io/upload_images/10356017-96a39394c1d2b710.png?imageMogr2/auto-orient/strip|imageView2/2/w/1000/format/webp) 
 
-
-
  1个Arena由两个PoolSubpage数组和多个ChunkList组成。 
 
  两个PoolSubpage数组分别为tinySubpagePools和smallSubpagePools。多个ChunkList按照双向链表排列。
@@ -22,6 +20,22 @@
 我们让每个叶子节点管理一个Page，那么其父节点管理的内存即为两个Page(其父节点有左右两个叶子节点)，以此类推，树的根节点管理了这个PoolChunk所有的Page(因为所有的叶子结点都是其子节点)，而树中某个节点所管理的内存大小即是以该节点作为根的子树所包含的叶子节点管理的全部Page。
 
 这样做的好处就是当你需要内存时，很快可以找到从何处分配内存（你只需要从上往下找到所管理的内存为你需要的内存的节点，然后将该节点所管理的内存分配出去即可)，并且所分配的内存还是连续的(只要保证相邻叶子节点对应的Page是连续的即可)。
+
+
+
+如何得知chunk内哪些page节点有内存可用？
+
+- memoryMap[] 和 depthMap[] 初识化完成时，如上图所示，数组 index 代表树的节点编号（从1开始，1-4095），数组 value 存出当前节点编号在树中的高度（从0开始，0-11）。两个数组的内容完全相同。
+- depthMap[] 初始化完成后，便永远不会变化，仅用来通过节点编号快速获取树的高度。depthMap[1024]=10、depthMap[2048]=11，毕竟数组查询 O(1) 的时间复杂度，不需要每次在进行计算
+- memoryMap[] 初识化完成后，根据节点的分配情况，value 值会进行相应的更改。以及根据 value 值判断该节点是否可以被分配。
+
+memoryMap[] 中的 value 值从小到大，会有下述三种状态：
+
+1. memoryMap[id] = depthMap[id] ，该节点没有被分配。如初始化完成时此种状态。
+2. depthMap[id] < memoryMap[id] < 最大高度(12)。至少有一个子节点被分配，但尚未完全被分配，不能再分配该高度对应的内存，只能根据实际分配较小一些的内存。
+3. memoryMap[id] = 最大高度(12) ，该节点及其子节点已被完全分配，没有剩余空间。
+
+
 
  [Netty-真实内存池 - 简书 (jianshu.com)](https://www.jianshu.com/p/4875dfa6eba9) 
 
