@@ -51,6 +51,7 @@
     单例模式—在spring配置文件中定义的bean默认为单例模式。
     工厂模式—BeanFactory用来创建对象的实例。
 
+
 ##  springboot
 
 **相对于spring的优点**
@@ -60,6 +61,14 @@
 **starter原理**
 
 springboot会扫描jar包内metainfo目录下的spring.factories,里面指定了需要自动配置的类
+
+**springboot启动顺序**
+
+1 判断应用类型是servlet、reactive、none
+2 扫描spring.factories文件，加载初始化器和监听器
+3 准备环境、加载参数
+4 创建上下文
+5 刷新上下文
 
 **获取配置**
 
@@ -99,6 +108,32 @@ springboot会扫描jar包内metainfo目录下的spring.factories,里面指定了
     - afterCompletion
       - DispatcherServlet进行视图的渲染之后
 
+## 三级缓存
+
+  缓存其实就是三个Map
+
+  singletonObjects： 一级缓存，存储单例对象，Bean 已经实例化，初始化完成。 
+  
+  earlySingletonObjects： 二级缓存，存储 singletonObject，这个 Bean 实例化了，还没有初始化。 
+  
+  singletonFactories： 三级缓存，存储 singletonFactory
+
+  解决循环依赖步骤：
+  
+  - A 创建过程中需要 B，于是 A 将自己放到三级缓里面 ，去实例化 B
+
+    B 实例化的时候发现需要 A，于是 B 先查一级缓存，没有，再查二级缓存，还是没有，再查三级缓存，找到了！
+
+    然后把三级缓存里面的这个 A 放到二级缓存里面，并删除三级缓存里面的 A
+
+    B 顺利初始化完毕，将自己放到一级缓存里面（此时B里面的A依然是创建中状态）
+
+    然后回来接着创建 A，此时 B 已经创建结束，直接从一级缓存里面拿到 B ，然后完成创建，并将自己放到一级缓存里面
+
+
+  ![image](https://github.com/dragon-twister/java-note/assets/27356869/5bea74d7-d5c3-4a4d-b91e-cd846ae69f3c)
+
+
 
 ## Spring WebFlux
 
@@ -115,16 +150,6 @@ springboot会扫描jar包内metainfo目录下的spring.factories,里面指定了
 ## FAQ
 
 - 循环依赖怎么解决
-
-  - A 创建过程中需要 B，于是 A 将自己放到三级缓里面 ，去实例化 B
-
-    B 实例化的时候发现需要 A，于是 B 先查一级缓存，没有，再查二级缓存，还是没有，再查三级缓存，找到了！
-
-    然后把三级缓存里面的这个 A 放到二级缓存里面，并删除三级缓存里面的 A
-
-    B 顺利初始化完毕，将自己放到一级缓存里面（此时B里面的A依然是创建中状态）
-
-    然后回来接着创建 A，此时 B 已经创建结束，直接从一级缓存里面拿到 B ，然后完成创建，并将自己放到一级缓存里面
 
 - 如何在启动时执行代码
 
